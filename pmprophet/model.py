@@ -339,6 +339,18 @@ class PMProphet:
                 sd=self.priors['sigma'],
                 observed=(self.data['y'] - self.data['y'].mean()) / self.data['y'].std()
             )
+
+            ### Experimental: StudentT errors instead of Normal errors
+            # y_sd = pm.HalfNormal('y_sd', sd=10)
+            # y_nu = pm.Exponential('y_nu', 1/100)    # 1/30
+            # pm.StudentT(
+            #     'y_%s' % self.name,
+            #     mu=(self.y - self.data['y'].mean()) / self.data['y'].std(),
+            #     sd=y_sd, 
+            #     nu=y_nu, 
+            #     observed=(self.data['y'] - self.data['y'].mean()) / self.data['y'].std()
+            # )
+
             pm.Deterministic('y_hat_%s' % self.name, self.y)
 
     def fit(self, draws=500, chains=4, trace_size=500, method='NUTS', map_initialization=False,
